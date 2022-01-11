@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+<script>
+
+  const $ = selector => {
+    const elements = [...document.querySelectorAll(selector)] // force it to be an actual array
+    return elements.length > 1 ? elements : elements[0] // no new DOM selections have been made
+  }
+
+const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+let original_data = []
+const list = $('ul.suggestions')
+
+const fetch_append_data = async () => {
+  const response = await fetch(endpoint)
+  const data = await response.json()
+
+  console.log(data)
+
+  /* set original data */
+  original_data = data
+
+  // for(let item of data) {
+  //   list.innerHTML += `<li> ${item.city} <span class="population"> ${item.population} </span> </li>`
+  // }
+}
+
+fetch_append_data()
+
+const filter_input = $('input')
+
+document.addEventListener('input', e => {
+
+  const data_filter = e.target.value
+  const new_data = original_data.filter(item => item.city.includes(data_filter))
+
+  /* empty list */
+  list.innerHTML = ''
+
+  for(let item of new_data) {
+    const start = item.city.search(data_filter)
+    const end = start + data_filter.length + 1
+
+    const split_city = item.city.split('')
+    split_city.splice(start, 0, '<span class="hl">')
+    split_city.splice(end, 0, '</span>')
+
+    const highlighted_city = split_city.join('')
+
+    list.innerHTML += `<li> <p>${highlighted_city}</p> <span class="population"> ${item.population} </span> </li>`
+  }
+})
+
+</script>
+</body>
+</html>
