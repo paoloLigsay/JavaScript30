@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS Reference VS Copy</title>
+</head>
+<body>
+
+  <script>
+    // start with strings, numbers and booleans
+    // let n = 1,
+    //     n2 = 2
+    // console.log(n, n2)
+    // n = 3
+    // console.log(n, n2)
+    
+    // Let's say we have an array
+    const players = ['Wes', 'Sarah', 'Ryan', 'Poppy'];
+
+    // and we want to make a copy of it.
+
+    // You might think we can just do something like this:
+
+    // const new_team = players
+
+    // however what happens when we update that array?
+
+    // new_team.pop()
+    // console.log(players)
+
+    // now here is the problem!
+
+    // oh no - we have edited the original array too!
+
+    // Why? It's because that is an array reference, not an array copy. They both point to the same array!
+
+    // So, how do we fix this? We take a copy instead!
+
+    // one way
+    const team2 = players.slice()
+    
+    // or create a new array and concat the old one in
+    const team3 = [].concat(players)
+
+    // or use the new ES6 Spread
+    const team4 = [...players]
+    const team5 = Array.from(players)
+    team5.pop()
+    console.log(players)
+
+    // now when we update it, the original one isn't changed
+
+    // The same thing goes for objects, let's say we have a person object
+
+    // with Objects
+    const person = {
+      name: 'Wes Bos',
+      age: 80
+    };
+
+    // and think we make a copy:
+    const captain = person
+    // captain.age = 99
+    // console.log(person)
+
+    // how do we take a copy instead?
+    const captain2 = Object.assign({}, person, { age: 22 })
+    console.log(person)
+    console.log(captain2)
+
+    // We will hopefully soon see the object ...spread
+    const captain3 = {...person, age: 11 }
+    console.log(captain3)
+
+    // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
+    const p = {
+      name: 'pao',
+      age: 3,
+      social: {
+        twitter: '@sample'
+      }
+    }
+
+    // const p2 = Object.assign({}, p)
+    // p2.social.twitter = '@thisisaonthersample'
+    // console.log(p)
+    // console.log(p2)
+
+    const p3 = JSON.parse(JSON.stringify({...p}))
+    p3.social.twitter = '@anotherone'
+    console.log(p)
+    console.log(p3)
+
+  </script>
+
+</body>
+</html>
