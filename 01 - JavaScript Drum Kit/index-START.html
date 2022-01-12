@@ -81,10 +81,10 @@
   }
 
   document.addEventListener('keydown', e => {
-    if(data_keys.includes(e.which.toString())) {
-      make_sound(e.which)
+    if(data_keys.includes(e.keyCode.toString())) {
+      make_sound(e.keyCode)
     }
-  }) 
+  })
 </script>
 
 
