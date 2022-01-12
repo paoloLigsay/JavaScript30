@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Key Detection</title>
+  <script type="text/javascript" src="https://www.cornify.com/js/cornify.js"></script>
+</head>
+<body>
+
+<script>
+
+  const my_code = 'paolo'
+  let key_sequence = []
+
+  const unlock = ()=> {
+    key_sequence = []
+    console.log('secret code unlocked')
+    cornify_add()
+  }
+
+  document.addEventListener('keydown', e => {
+    key_sequence.push(e.key)
+    key_sequence.length > 5 && key_sequence.shift()
+    key_sequence
+      .join('')
+      .includes(my_code) && unlock()
+  })
+
+</script>
+
+</body>
+</html>
