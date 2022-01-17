@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Understanding JavaScript's Capture</title>
+</head>
+<body class="bod">
+
+  <div class="one">
+    <div class="two">
+      <div class="three">
+      </div>
+    </div>
+  </div>
+
+  <button> Click Me </button>
+
+<style>
+  html {
+    box-sizing: border-box;
+  }
+  
+  *, *:before, *:after { 
+    box-sizing: inherit; 
+  }
+
+  div {
+    width: 100%;
+    padding: 100px;
+  }
+
+  .one {
+    background: thistle;
+  }
+
+  .two {
+    background: mistyrose;
+  }
+
+  .three {
+    background: coral;
+  }
+</style>
+<script>
+
+  /*
+    Event Capture - top to bottom
+    Bubbling - bottom to top
+
+    click > captures event from top to bottom > function runs from bottom to top
+    div.forEach(div => div.addEventListener('click', logText, { capture: false, once: true }))
+
+    once - will only listen once.
+
+    e.stopPropagation() - stop bubbling up. 
+  */
+
+  const $ = selector => {
+    const elements = [...document.querySelectorAll(selector)] // force it to be an actual array
+    return elements.length > 1 ? elements : elements[0] // no new DOM selections have been made
+  }
+
+  const divs = $('div'),
+        button = $('button')
+
+  // const log_text = e => console.log(this.classList.value)
+
+  function log_text(e) {
+    console.log(this.classList.value);
+  }
+
+  divs.forEach(div => div.addEventListener('click', log_text, {
+    capture: true
+  }))
+
+  button.addEventListener('click', () => {
+    console.log('click')
+  }, { once: true })
+
+</script>
+</body>
+</html>
