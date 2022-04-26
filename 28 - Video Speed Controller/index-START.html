@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Video Speed Scrubber</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="wrapper">
+    <video class="flex" width="765" height="430" src="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4" loop controls></video>
+    <div class="speed">
+      <div class="speed-bar">1×</div>
+    </div>
+  </div>
+
+<script>
+
+  const $ = selector => {
+    const elements = [...document.querySelectorAll(selector)] // force it to be an actual array
+    return elements.length > 1 ? elements : elements[0] // no new DOM selections have been made
+  }
+
+  const speed = $('.speed'),
+        speed_bar = $('.speed-bar'),
+        video = $('video')
+
+  speed.addEventListener('mousemove', e => {
+    speed_value = (e.clientY - speed.getBoundingClientRect().top)/100 > 4 ? 4
+                  : (e.clientY - speed.getBoundingClientRect().top)/100 < 0.4 ? 0.4
+                  : (e.clientY - speed.getBoundingClientRect().top)/100
+
+    speed_bar_value = (e.clientY - speed.getBoundingClientRect().top)/4 > 100 ? 100
+                : (e.clientY - speed.getBoundingClientRect().top)/4
+
+    speed_bar.style.height = `${speed_bar_value}%`
+    speed_bar.textContent = `${speed_value.toFixed(2)}x`
+
+    video.playbackRate = speed_value
+  })
+
+</script>
+
+
+</body>
+</html>
