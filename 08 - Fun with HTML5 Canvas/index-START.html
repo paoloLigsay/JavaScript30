@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>HTML5 Canvas</title>
+    <style>
+      html, body {
+        margin: 0;
+        color: hsl(357, 100%, 50%);
+      }
+    </style>
+  </head>
+  <body>
+
+  <canvas id="draw" width="800" height="800"></canvas>
+
+  <script>
+
+  const $ = selector => {
+    const elements = [...document.querySelectorAll(selector)] // force it to be an actual array
+    return elements.length > 1 ? elements : elements[0] // no new DOM selections have been made
+  }
+
+  const canvas = $('canvas#draw'),
+        context = canvas.getContext('2d')
+
+  let paint_enable = false,
+      line_width = 100,
+      min_line_width = 5,
+      max_line_width = 100,
+      line_size_down = true,
+      hsl_value = 0
+
+
+  const draw = e => {
+      if(!paint_enable) {
+        return
+      }
+
+      context.lineWidth = line_width
+      context.lineCap = 'round'
+
+      if(line_size_down) {
+        line_width < min_line_width ? line_size_down = false : line_width -= 0.4
+      } else {
+        line_width > max_line_width ? line_size_down = true  : line_width += 0.4
+      }
+
+      hsl_value > 356 ? hsl_value = 0 : hsl_value++
+      context.strokeStyle = `hsl(${hsl_value}, 100%, 50%)`
+
+      /* -------- SWITCHED TO HSL --------
+
+      let rgb_first_param = 255,
+      rgb_mid_param = 1
+
+      const reset_rgb = () => {
+        rgb_first_param = 255
+        rgb_mid_param = 1
+      }
+
+      !(rgb_mid_param > 254) && rgb_mid_param++
+      (rgb_first_param >= 1 && rgb_mid_param === 255) && rgb_first_param--
+
+      (rgb_mid_param > 254 && rgb_first_param < 1) && reset_rgb()
+
+      context.strokeStyle = `rgb(${rgb_first_param}, ${rgb_mid_param}, ${0})` */
+
+      context.lineTo(e.clientX, e.clientY)
+      context.stroke()
+      context.beginPath()
+      context.moveTo(e.clientX, e.clientY)
+  }
+
+  canvas.addEventListener('mousedown', e => paint_enable = true)
+
+  canvas.addEventListener('mouseup', () => {
+    paint_enable = false
+    context.stroke()
+    context.beginPath()
+  })
+
+  canvas.addEventListener('mousemove', draw)
+
+  </script>
+
+  </body>
+</html>
